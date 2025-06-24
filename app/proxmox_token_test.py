@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 from proxmoxer import ProxmoxAPI
 
 CONFIG_PATH = os.getenv("CONFIG_PATH", "config.json")
