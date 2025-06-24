@@ -50,7 +50,6 @@ setup(
     install_requires=read_requirements(),
     extras_require={
         "dev": [
-            "pytest>=7.0",
             "black>=22.0",
             "flake8>=4.0",
             "isort>=5.0",

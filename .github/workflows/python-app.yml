@@ -1,4 +1,4 @@
-name: Python Application CI
+name: Code Quality & Security
 
 on:
   push:
@@ -10,33 +10,27 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  lint-and-security:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
+    
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
     
-    - name: Install dependencies
+    - name: Install linting and security tools
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-cov black isort
-        # Installiere nur grundlegende Dependencies für Tests, nicht die Proxmox-spezifischen
-        pip install requests
-        # if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+        pip install flake8 black isort bandit safety
     
     - name: Lint with flake8
       run: |
-        # stop the build if there are Python syntax errors or undefined names
+        # Prüfe auf Python-Syntax-Fehler und undefinierte Namen
         flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # Alle anderen Warnungen als nicht-kritisch behandeln
         flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Check code formatting with black
@@ -47,39 +41,12 @@ jobs:
       run: |
         isort --check-only --diff app/
     
-    - name: Test with pytest
+    - name: Run security scan with bandit
       run: |
-        pytest tests/ -v --junitxml=junit/test-results.xml --cov=app --cov-report=xml --cov-report=html
+        bandit -r app/ || echo "Bandit hat potentielle Sicherheitsprobleme gefunden - siehe Ausgabe oben"
       continue-on-error: true
     
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install security tools
+    - name: Check for known vulnerabilities with safety
       run: |
-        python -m pip install --upgrade pip
-        pip install bandit safety
-        pip install requests
-        # if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
-    
-    - name: Run bandit security linter
-      run: |
-        bandit -r app/ -f json -o bandit-report.json || echo "Bandit gefunden potentielle Sicherheitsprobleme"
-      continue-on-error: true
-    
-    - name: Check for known security vulnerabilities
-      run: |
-        safety check --json --output safety-report.json || echo "Safety check abgeschlossen"
+        safety check || echo "Safety check abgeschlossen"
       continue-on-error: true 

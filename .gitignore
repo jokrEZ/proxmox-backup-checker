@@ -179,12 +179,6 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Code quality and testing reports
-junit/
+# Code quality reports
 .flake8
-.bandit
-safety-report.json
-bandit-report.json
-
-# GitHub Actions artifacts
-.github/workflows/artifacts/ 
+.bandit 

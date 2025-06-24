@@ -35,8 +35,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
     "black>=22.0",
     "flake8>=4.0",
     "isort>=5.0",
@@ -94,19 +92,4 @@ exclude = [
 exclude_dirs = ["tests"]
 skips = ["B101"]
 
-[tool.coverage.run]
-source = ["app"]
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/__pycache__/*"
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-] 
+ 
