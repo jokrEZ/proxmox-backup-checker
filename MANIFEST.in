@@ -1,0 +1,12 @@
+include README.MD
+include LICENSE
+include CHANGELOG.md
+include PRODUCT.MD
+include STYLEGUIDE.MD
+include TODO.MD
+include app/config.json.example
+include app/requirements.txt
+include app/start.sh
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store 

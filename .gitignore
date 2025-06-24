@@ -177,4 +177,14 @@ Thumbs.db
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# Code quality and testing reports
+junit/
+.flake8
+.bandit
+safety-report.json
+bandit-report.json
+
+# GitHub Actions artifacts
+.github/workflows/artifacts/ 
