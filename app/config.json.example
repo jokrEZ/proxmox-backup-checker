@@ -1,0 +1,10 @@
+{
+  "debug": true,
+  "proxmox_host": "your-proxmox-host.example.com",
+  "proxmox_api_token_user": "root@pam",
+  "proxmox_api_token_name": "backupscript",
+  "proxmox_api_token_secret": "your-api-token-secret-here",
+  "proxmox_verify_ssl": false,
+  "log_dir": "/var/log/vzdump",
+  "ha_webhook_url": "http://your-homeassistant:8123/api/webhook/proxmox_backup_error"
+} 
